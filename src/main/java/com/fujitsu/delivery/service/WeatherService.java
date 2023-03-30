@@ -31,6 +31,7 @@ public class WeatherService {
         StationListDto response = restTemplate.getForObject(WEATHER_PORTAL_URL, StationListDto.class);
         for (StationDTO stationDTO: Objects.requireNonNull(response).getStations()) {
             if (OBSERVED_STATIONS.contains(stationDTO.getName())) {
+                stationDTO.setTimestamp(response.getTimestamp());
                 save(stationDTO);
             }
         }
