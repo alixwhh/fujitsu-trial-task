@@ -36,4 +36,8 @@ public class WeatherService {
             }
         }
     }
+
+    public Station getCurrentWeatherData(String city) {
+        return weatherRepository.findFirstByNameContainingIgnoreCaseOrderByIdDesc(city);
+    }
 }

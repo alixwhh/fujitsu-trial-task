@@ -7,5 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface WeatherRepository extends JpaRepository<Station, Integer> {
+    Station findFirstByNameContainingIgnoreCaseOrderByIdDesc(String city);
 }
 
