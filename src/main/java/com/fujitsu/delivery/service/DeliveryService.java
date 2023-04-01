@@ -21,10 +21,10 @@ public class DeliveryService {
                     "Pärnu", Map.of("Car", BigDecimal.valueOf(3), "Scooter", BigDecimal.valueOf(2.5), "Bike", BigDecimal.valueOf(2)));
 
 
-    public int getDeliveryFees(String city, String vehicleType) {
+    public BigDecimal getDeliveryFees(String city, String vehicleType) {
         BigDecimal regionalBaseFees = REGIONAL_BASE_FEES.get(city).get(vehicleType);
         BigDecimal extraFees = calculateExtraFees(city, vehicleType);
-        return 0;
+        return regionalBaseFees.add(extraFees);
     }
 
 
