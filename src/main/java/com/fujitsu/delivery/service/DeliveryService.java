@@ -23,15 +23,27 @@ public class DeliveryService {
 
 
     public BigDecimal getDeliveryFees(String city, String vehicleType) {
-        BigDecimal regionalBaseFees = REGIONAL_BASE_FEES.get(city).get(vehicleType);
+        BigDecimal regionalBaseFees = getRegionalBaseFees(city, vehicleType);
         BigDecimal extraFees = calculateExtraFees(city, vehicleType);
         return regionalBaseFees.add(extraFees);
+    }
+
+    public BigDecimal getRegionalBaseFees(String city, String vehicleType) {
+        Map<String, BigDecimal> cityFeesData = REGIONAL_BASE_FEES.get(city);
+        if (cityFeesData == null) {
+            throw new ApplicationException("Entered city is unavailable");
+        }
+        BigDecimal regionalBaseFees = cityFeesData.get(vehicleType);
+        if (regionalBaseFees == null) {
+            throw new ApplicationException("Entered vehicle type is unavailable");
+        }
+        return regionalBaseFees;
     }
 
 
     public BigDecimal calculateExtraFees(String city, String vehicleType) {
         BigDecimal extraFees = BigDecimal.ZERO;
-        Station currentWeatherData = getCurrentWeatherData(city);
+        Station currentWeatherData = weatherService.getCurrentWeatherData(city);
         if (vehicleType.equals("Scooter") || vehicleType.equals("Bike")) {
             extraFees = extraFees.add(getAirTemperatureExtraFees(currentWeatherData));
             extraFees = extraFees.add(getWeatherPhenomenonExtraFees(currentWeatherData));
@@ -77,9 +89,5 @@ public class DeliveryService {
             }
         }
         return BigDecimal.ZERO;
-    }
-
-    public Station getCurrentWeatherData(String city) {
-        return weatherService.getCurrentWeatherData(city);
     }
 }
