@@ -21,11 +21,19 @@ public class WeatherService {
     @Autowired
     private WeatherRepository weatherRepository;
 
+    /**
+     * Saves the weather station with all the weather data to the database.
+     *
+     * @param stationDTO DTO of the weather station that will be saved
+     */
     public void save(StationDTO stationDTO) {
         ModelMapper modelMapper = ModelMapperFactory.getMapper();
         weatherRepository.save(modelMapper.map(stationDTO, Station.class));
     }
 
+    /**
+     * Saves weather data for the observed stations to the database.
+     */
     public void saveWeather() {
         RestTemplate restTemplate = new RestTemplate();
         StationListDto response = restTemplate.getForObject(WEATHER_PORTAL_URL, StationListDto.class);
@@ -36,6 +44,12 @@ public class WeatherService {
             }
         }
     }
+
+    /**
+     * Finds the latest weather data for the given city.
+     *
+     * @return weather station with the most recent weather data for the given city
+     */
 
     public Station getCurrentWeatherData(String city) {
         return weatherRepository.findFirstByNameContainingIgnoreCaseOrderByIdDesc(city);
