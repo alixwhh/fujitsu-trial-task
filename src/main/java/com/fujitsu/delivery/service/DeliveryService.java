@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import com.fujitsu.delivery.entity.Station;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
 
 
@@ -32,6 +33,7 @@ public class DeliveryService {
         Station currentWeatherData = getCurrentWeatherData(city);
         if (vehicleType.equals("Scooter") || vehicleType.equals("Bike")) {
             extraFees = extraFees.add(getAirTemperatureExtraFees(currentWeatherData));
+            extraFees = extraFees.add(getWeatherPhenomenonExtraFees(currentWeatherData));
             if (vehicleType.equals("Bike")) {
                 extraFees = extraFees.add(getWindSpeedExtraFees(currentWeatherData));
             }
@@ -57,6 +59,21 @@ public class DeliveryService {
             return BigDecimal.valueOf(0.5);
         } else if (windSpeed > 20) {
             System.out.println("Usage of selected vehicle type is forbidden");
+        }
+        return BigDecimal.ZERO;
+    }
+
+    public BigDecimal getWeatherPhenomenonExtraFees(Station currentWeatherData) {
+        String weatherPhenomenon = currentWeatherData.getPhenomenon();
+        if (weatherPhenomenon != null) {
+            weatherPhenomenon = weatherPhenomenon.toLowerCase();
+            if (weatherPhenomenon.contains("snow") || weatherPhenomenon.contains("sleet")) {
+                return BigDecimal.ONE;
+            } else if (weatherPhenomenon.contains("rain") || List.of("light shower", "moderate shower", "heavy shower").contains(weatherPhenomenon)) {
+                return BigDecimal.valueOf(0.5);
+            } else if (weatherPhenomenon.equals("glaze") || weatherPhenomenon.equals("hail") || weatherPhenomenon.equals("thuder")) {
+                System.out.println("Usage of selected vehicle type is forbidden");
+            }
         }
         return BigDecimal.ZERO;
     }
