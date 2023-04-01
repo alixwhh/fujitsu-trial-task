@@ -32,6 +32,9 @@ public class DeliveryService {
         Station currentWeatherData = getCurrentWeatherData(city);
         if (vehicleType.equals("Scooter") || vehicleType.equals("Bike")) {
             extraFees = extraFees.add(getAirTemperatureExtraFees(currentWeatherData));
+            if (vehicleType.equals("Bike")) {
+                extraFees = extraFees.add(getWindSpeedExtraFees(currentWeatherData));
+            }
         }
         return extraFees;
     }
@@ -46,6 +49,16 @@ public class DeliveryService {
             }
         }
         return extraFees;
+    }
+
+    public BigDecimal getWindSpeedExtraFees(Station currentWeatherData) {
+        double windSpeed = currentWeatherData.getWindSpeed();
+        if (windSpeed <= 20 && windSpeed >= 10) {
+            return BigDecimal.valueOf(0.5);
+        } else if (windSpeed > 20) {
+            System.out.println("Usage of selected vehicle type is forbidden");
+        }
+        return BigDecimal.ZERO;
     }
 
     public Station getCurrentWeatherData(String city) {
