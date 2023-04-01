@@ -1,5 +1,6 @@
 package com.fujitsu.delivery.service;
 
+import com.fujitsu.delivery.exception.ApplicationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.fujitsu.delivery.entity.Station;
@@ -58,7 +59,7 @@ public class DeliveryService {
         if (windSpeed <= 20 && windSpeed >= 10) {
             return BigDecimal.valueOf(0.5);
         } else if (windSpeed > 20) {
-            System.out.println("Usage of selected vehicle type is forbidden");
+            throw new ApplicationException("Usage of selected vehicle type is forbidden");
         }
         return BigDecimal.ZERO;
     }
@@ -72,7 +73,7 @@ public class DeliveryService {
             } else if (weatherPhenomenon.contains("rain") || List.of("light shower", "moderate shower", "heavy shower").contains(weatherPhenomenon)) {
                 return BigDecimal.valueOf(0.5);
             } else if (weatherPhenomenon.equals("glaze") || weatherPhenomenon.equals("hail") || weatherPhenomenon.equals("thuder")) {
-                System.out.println("Usage of selected vehicle type is forbidden");
+                throw new ApplicationException("Usage of selected vehicle type is forbidden");
             }
         }
         return BigDecimal.ZERO;
