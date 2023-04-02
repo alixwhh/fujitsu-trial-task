@@ -9,9 +9,9 @@ import lombok.Setter;
 @Setter
 @XmlRootElement(name="observations")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class StationListDto {
+public class WeatherStationListDto {
     @XmlElement(name="station")
-    private List<StationDTO> stations;
+    private List<WeatherStationDTO> stations;
 
     @XmlAttribute(name="timestamp")
     private int timestamp;

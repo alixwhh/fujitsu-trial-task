@@ -1,5 +1,5 @@
-DROP TABLE IF EXISTS station;
-CREATE TABLE station (
+DROP TABLE IF EXISTS weather_station;
+CREATE TABLE weather_station (
     id INT AUTO_INCREMENT PRIMARY KEY,
     station VARCHAR(255),
     wmo_code VARCHAR(255),

@@ -1,6 +1,6 @@
 package com.fujitsu.delivery.service;
 
-import com.fujitsu.delivery.entity.Station;
+import com.fujitsu.delivery.entity.WeatherStation;
 import com.fujitsu.delivery.repository.WeatherRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,17 +21,17 @@ class WeatherServiceTest {
     @InjectMocks
     private WeatherService weatherService;
 
-    public static final Station station = Station.builder().name("Tartu-Tõravere").WMOCode(26242)
+    public static final WeatherStation WEATHER_STATION = WeatherStation.builder().name("Tartu-Tõravere").WMOCode(26242)
             .airTemperature(-2.1).windSpeed(4.7).phenomenon("Light snow shower").build();
 
 
     @Test
     void givenCity_whenGetCurrentWeatherData_thenShouldReturnStation() {
-        given(weatherRepository.findFirstByNameContainingIgnoreCaseOrderByIdDesc("Tartu")).willReturn(station);
+        given(weatherRepository.findFirstByNameContainingIgnoreCaseOrderByIdDesc("Tartu")).willReturn(WEATHER_STATION);
 
         var result = weatherService.getCurrentWeatherData("Tartu");
 
         then(weatherRepository).should().findFirstByNameContainingIgnoreCaseOrderByIdDesc("Tartu");
-        assertEquals(station, result);
+        assertEquals(WEATHER_STATION, result);
     }
 }

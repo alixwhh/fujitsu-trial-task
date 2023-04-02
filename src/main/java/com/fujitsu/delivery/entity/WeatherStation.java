@@ -13,7 +13,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Station {
+public class WeatherStation {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int id;

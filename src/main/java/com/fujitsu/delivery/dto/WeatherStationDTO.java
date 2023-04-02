@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 @XmlRootElement(name="station")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class StationDTO {
+public class WeatherStationDTO {
     private String name;
     @XmlElement(name="wmocode")
     private int WMOCode;

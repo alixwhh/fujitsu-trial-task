@@ -3,7 +3,7 @@ package com.fujitsu.delivery.service;
 import com.fujitsu.delivery.exception.ApplicationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.fujitsu.delivery.entity.Station;
+import com.fujitsu.delivery.entity.WeatherStation;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -68,7 +68,7 @@ public class DeliveryService {
      */
     public BigDecimal calculateExtraFees(String city, String vehicleType) {
         BigDecimal extraFees = BigDecimal.ZERO;
-        Station currentWeatherData = weatherService.getCurrentWeatherData(city);
+        WeatherStation currentWeatherData = weatherService.getCurrentWeatherData(city);
         if (vehicleType.equals("Scooter") || vehicleType.equals("Bike")) {
             extraFees = extraFees.add(getAirTemperatureExtraFees(currentWeatherData));
             extraFees = extraFees.add(getWeatherPhenomenonExtraFees(currentWeatherData));
@@ -87,7 +87,7 @@ public class DeliveryService {
      * @param currentWeatherData weather station object with the latest weather data
      * @return the extra fees based on air temperature
      */
-    public BigDecimal getAirTemperatureExtraFees(Station currentWeatherData) {
+    public BigDecimal getAirTemperatureExtraFees(WeatherStation currentWeatherData) {
         BigDecimal extraFees = BigDecimal.ZERO;
         double airTemperature = currentWeatherData.getAirTemperature();
         if (airTemperature <= 0) {
@@ -108,7 +108,7 @@ public class DeliveryService {
      * @param currentWeatherData weather station object with the latest weather data
      * @return the extra fees based on wind speed
      */
-    public BigDecimal getWindSpeedExtraFees(Station currentWeatherData) {
+    public BigDecimal getWindSpeedExtraFees(WeatherStation currentWeatherData) {
         double windSpeed = currentWeatherData.getWindSpeed();
         if (windSpeed <= 20 && windSpeed >= 10) {
             return BigDecimal.valueOf(0.5);
@@ -128,7 +128,7 @@ public class DeliveryService {
      * @param currentWeatherData weather station object with the latest weather data
      * @return the extra fees based on weather phenomenon
      */
-    public BigDecimal getWeatherPhenomenonExtraFees(Station currentWeatherData) {
+    public BigDecimal getWeatherPhenomenonExtraFees(WeatherStation currentWeatherData) {
         String weatherPhenomenon = currentWeatherData.getPhenomenon();
         if (weatherPhenomenon != null) {
             weatherPhenomenon = weatherPhenomenon.toLowerCase();

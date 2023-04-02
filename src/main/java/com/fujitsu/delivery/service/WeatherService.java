@@ -1,14 +1,14 @@
 package com.fujitsu.delivery.service;
 
-import com.fujitsu.delivery.dto.StationDTO;
-import com.fujitsu.delivery.dto.StationListDto;
+import com.fujitsu.delivery.dto.WeatherStationDTO;
+import com.fujitsu.delivery.dto.WeatherStationListDto;
 import com.fujitsu.delivery.repository.WeatherRepository;
 import com.fujitsu.delivery.util.ModelMapperFactory;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import com.fujitsu.delivery.entity.Station;
+import com.fujitsu.delivery.entity.WeatherStation;
 
 import java.util.List;
 import java.util.Objects;
@@ -24,11 +24,11 @@ public class WeatherService {
     /**
      * Saves the weather station with all the weather data to the database.
      *
-     * @param stationDTO DTO of the weather station that will be saved
+     * @param weatherStationDTO DTO of the weather station that will be saved
      */
-    public void save(StationDTO stationDTO) {
+    public void save(WeatherStationDTO weatherStationDTO) {
         ModelMapper modelMapper = ModelMapperFactory.getMapper();
-        weatherRepository.save(modelMapper.map(stationDTO, Station.class));
+        weatherRepository.save(modelMapper.map(weatherStationDTO, WeatherStation.class));
     }
 
     /**
@@ -36,11 +36,11 @@ public class WeatherService {
      */
     public void saveWeather() {
         RestTemplate restTemplate = new RestTemplate();
-        StationListDto response = restTemplate.getForObject(WEATHER_PORTAL_URL, StationListDto.class);
-        for (StationDTO stationDTO: Objects.requireNonNull(response).getStations()) {
-            if (OBSERVED_STATIONS.contains(stationDTO.getName())) {
-                stationDTO.setTimestamp(response.getTimestamp());
-                save(stationDTO);
+        WeatherStationListDto response = restTemplate.getForObject(WEATHER_PORTAL_URL, WeatherStationListDto.class);
+        for (WeatherStationDTO weatherStationDTO : Objects.requireNonNull(response).getStations()) {
+            if (OBSERVED_STATIONS.contains(weatherStationDTO.getName())) {
+                weatherStationDTO.setTimestamp(response.getTimestamp());
+                save(weatherStationDTO);
             }
         }
     }
@@ -51,7 +51,7 @@ public class WeatherService {
      * @return weather station with the most recent weather data for the given city
      */
 
-    public Station getCurrentWeatherData(String city) {
+    public WeatherStation getCurrentWeatherData(String city) {
         return weatherRepository.findFirstByNameContainingIgnoreCaseOrderByIdDesc(city);
     }
 }
