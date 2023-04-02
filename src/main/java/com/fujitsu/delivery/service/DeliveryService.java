@@ -90,7 +90,7 @@ public class DeliveryService {
     public BigDecimal getAirTemperatureExtraFees(Station currentWeatherData) {
         BigDecimal extraFees = BigDecimal.ZERO;
         double airTemperature = currentWeatherData.getAirTemperature();
-        if (airTemperature < 0) {
+        if (airTemperature <= 0) {
             extraFees = extraFees.add(BigDecimal.valueOf(0.5));
             if (airTemperature < -10) {
                 extraFees = extraFees.add(BigDecimal.valueOf(0.5));
@@ -136,7 +136,7 @@ public class DeliveryService {
                 return BigDecimal.ONE;
             } else if (weatherPhenomenon.contains("rain") || List.of("light shower", "moderate shower", "heavy shower").contains(weatherPhenomenon)) {
                 return BigDecimal.valueOf(0.5);
-            } else if (weatherPhenomenon.equals("glaze") || weatherPhenomenon.equals("hail") || weatherPhenomenon.equals("thuder")) {
+            } else if (weatherPhenomenon.equals("glaze") || weatherPhenomenon.equals("hail") || weatherPhenomenon.equals("thunder")) {
                 throw new ApplicationException("Usage of selected vehicle type is forbidden");
             }
         }
